@@ -1,0 +1,113 @@
+
+version: 2
+
+models:
+  - name: my_first_dbt_model
+    description: "A starter dbt model"
+    columns:
+      - name: id
+        description: "The primary key for this table"
+        tests:
+          - unique
+          - not_null
+
+  - name: my_fifth_dbt_model
+    description: "A starter dbt model"
+    columns:
+      - name: id
+        description: "The primary key for this table"
+        tests:
+          - unique
+          - not_null
+
+  - name: my_second_dbt_model
+    description: "A starter dbt model"
+    columns:
+      - name: id
+        description: "The primary key for this table"
+        tests:
+          - unique
+          - not_null
+
+  - name: snowflake_customer_purchases
+    description: "A the total customer purchases for each customer in snowflake customer data"
+    columns:
+      - name: c_custkey
+        tests:
+          - unique
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_in_type_list:
+              column_name: c_custkey
+              column_type_list: ['int','float']
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_name: c_custkey
+              column_type: int
+
+  - name: cumu_total_price
+    description: "A cumulative count of total price per day"
+    columns:
+      - name: o_orderdate
+        tests:
+          - unique
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: date         
+
+  - name: time
+    columns:
+      - name: t_time_sk
+        tests:
+          - unique
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: ">= 0"
+          - dbt_expectations.expect_column_values_to_have_consistent_casing:
+              display_inconsistent_columns: false # (Optional) 
+
+  - name: my_third_dbt_model
+    description: "A starter dbt model"
+    columns:
+      - name: id
+        description: "The primary key for this table"
+        tests:
+          - unique
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_increasing:
+              sort_column: id
+              row_condition: "id is not null" # (Optional)
+              strictly: true # (Optional for comparison operator. Default is 'true', and it uses '>'. If set to 'false' it uses '>='.)
+          # (- dbt_expectations.expect_column_values_to_be_in_type_list:)
+             #( column_type_list: integer)
+
+  - name: my_fourth_dbt_model
+    description: "A starter dbt model version 2"
+    columns:
+      - name: id
+        description: "The primary key for this table"
+        tests:
+          - unique
+          - not_null
+          - relationships:
+              to: ref('my_fifth_dbt_model')
+              field: id
+
+  - name: pg_class
+  - name: pg_table
+
+  - name: snowflake_cust_sample_data
+    description: "A table of customer data"
+    columns:
+      - name: c_custkey
+        tests:
+          - unique
+          - not_null
+      - name: c_mktsegment
+        tests:
+          - accepted_values:
+              values: ['BUILDING','AUTOMOBILE','MACHINERY','HOUSEHOLD','FURNITURE']
+      - name: c_acctbal
+        test:
+          - test_acct_bal
+          - dbt_utils.expression_is_true:
+              expression: ">= -8000"
+
