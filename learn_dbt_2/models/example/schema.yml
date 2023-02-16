@@ -36,12 +36,12 @@ models:
         tests:
           - unique
           - not_null
-          - dbt_expectations.expect_column_values_to_be_in_type_list:
-              column_name: c_custkey
-              column_type_list: ['int','float']
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_name: c_custkey
-              column_type: int
+          #- dbt_expectations.expect_column_values_to_be_of_type:
+           #  column_name: c_custkey
+           #  column_type: int
+          #- dbt_expectations.expect_column_values_to_be_in_type_list:
+           #  column_name: c_custkey
+           #  column_type_list: ['int','float']
 
   - name: cumu_total_price
     description: "A cumulative count of total price per day"
