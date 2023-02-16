@@ -91,9 +91,6 @@ models:
               to: ref('my_fifth_dbt_model')
               field: id
 
-  - name: pg_class
-  - name: pg_table
-
   - name: snowflake_cust_sample_data
     description: "A table of customer data"
     columns:
