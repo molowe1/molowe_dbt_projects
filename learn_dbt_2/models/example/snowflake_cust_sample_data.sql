@@ -5,9 +5,9 @@ with sample_customer as (
     FROM {{ source('tpch_sf1_sample', 'customer')}}
 )
 
-
 select 
     c_custkey,
     c_mktsegment,
-    {{ rename_segments('c_mktsegment') }} mks_segment_adjusted
+    {{ rename_segments('c_mktsegment') }} mks_segment_adjusted,
+    c_acctbal
 from sample_customer
