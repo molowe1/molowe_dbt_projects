@@ -13,3 +13,7 @@ models:
               expression: ">= 0"
           - dbt_expectations.expect_column_values_to_have_consistent_casing:
               display_inconsistent_columns: false # (Optional) 
+      - name: d_weekend
+        tests:
+          - accepted_values:
+              values: ['Y','N']
