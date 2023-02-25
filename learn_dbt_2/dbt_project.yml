@@ -22,7 +22,16 @@ snapshot-paths: ["snapshots"]
 target-path: "target"  # directory which will store compiled SQL files
 clean-targets:         # directories to be removed by `dbt clean`
   - "dbt_packages"
-  #- "target"
+  - "target"
+
+# hooks - to run sql commands before or after creating or dropping models/tables
+on-run-start:
+  - "create table if not exists audit (model text, state text, time timestamp_ltz)"
+
+on-run-end:
+  - 'grant usage on schema analytics.dbt to role analyst'
+  - 'grant select on all tables in schema analytics.dbt to role analyst'
+  - 'grant select on all views in schema analytics.dbt to role analyst'
 
 # Configuring models
 # Full documentation: https://docs.getdbt.com/docs/configuring-models
@@ -39,3 +48,5 @@ models:
         my_first_variable: {'True'}
         my_second_variable: {2020}
         my_third_variable: {1}
+      pre-hook: "insert into dbt.audit (model, state, time) values('{{this.name}}','starting model deployment', current_timestamp)"
+      #tags: "nightly" #every single model with the tag will run

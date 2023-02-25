@@ -1,5 +1,3 @@
-tests/Date_test.sql
-tests/test_if_numeric.sql
 target/
 dbt_packages/
 logs/
